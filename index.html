@@ -215,28 +215,80 @@
 
   /* ── themes showcase ── */
   .themes-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
   }
   @media (max-width: 900px) { .themes-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 560px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
   .theme-card {
-    border-radius: 11px; padding: 14px 14px 12px; min-height: 92px;
-    font-family: var(--mono); font-size: 12px; letter-spacing: -0.005em;
-    display: flex; flex-direction: column; justify-content: space-between;
-    transition: transform 140ms;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-    border: 1px solid rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; gap: 9px;
+    transition: transform 160ms;
+    background: transparent; border: 0; padding: 0; margin: 0;
   }
-  .theme-card:hover { transform: translateY(-2px); }
-  .theme-card .t-name { font-weight: 600; }
-  .theme-card .t-sub { opacity: 0.65; font-size: 10.5px; margin-top: 2px; letter-spacing: 0.04em; text-transform: uppercase; }
-  .theme-card .t-swatch { display: flex; gap: 5px; margin-top: 12px; }
-  .theme-card .t-swatch span {
-    width: 14px; height: 14px; border-radius: 4px; display: inline-block;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+  .theme-card:hover { transform: translateY(-3px); }
+
+  .theme-card .tp {
+    background: var(--tp-bg);
+    border: 1px solid var(--tp-line);
+    border-radius: 9px;
+    overflow: hidden;
+    min-height: 118px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 8px 20px -16px rgba(0,0,0,0.25);
   }
-  .theme-card.dark-ring { border-color: rgba(255,255,255,0.08); }
-  .theme-card.dark-ring .t-swatch span { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
+  .theme-card .tp-bar {
+    background: var(--tp-bar);
+    border-bottom: 1px solid var(--tp-line);
+    padding: 4px 6px;
+    display: flex; align-items: center; gap: 2px;
+  }
+  .theme-card .tp-btn {
+    font-family: var(--mono);
+    font-size: 9.5px; line-height: 1;
+    color: var(--tp-fg);
+    padding: 3px 5px;
+    border-radius: 3px;
+    opacity: 0.92;
+  }
+  .theme-card .tp-btn.b { font-weight: 700; }
+  .theme-card .tp-btn.i { font-style: italic; }
+  .theme-card .tp-body { padding: 9px 11px 11px; }
+  .theme-card .tp-h {
+    font-family: var(--mono); font-weight: 700;
+    font-size: 11.5px; letter-spacing: -0.01em;
+    color: var(--tp-fg);
+    margin: 0 0 4px;
+  }
+  .theme-card .tp-p {
+    font-family: var(--serif);
+    font-size: 11px; line-height: 1.45;
+    color: var(--tp-fg);
+    margin: 0;
+  }
+  .theme-card .tp-p b { color: var(--tp-fg); }
+  .theme-card .tp-p a { color: var(--tp-acc); text-decoration: underline; text-decoration-thickness: 1px; }
+
+  .theme-card figcaption {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    padding: 0 2px;
+    font-family: var(--mono);
+  }
+  .theme-card .t-name {
+    font-size: 12.5px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em;
+  }
+  .theme-card .t-sub {
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  .theme-hint {
+    font-family: var(--serif);
+    font-size: 16px; line-height: 1.55; color: var(--ink-soft);
+    max-width: 60ch; margin: 32px 0 0;
+  }
+  .theme-hint code {
+    font-family: var(--mono); font-size: 0.86em;
+    background: var(--paper-2); color: var(--ink);
+    padding: 2px 6px; border-radius: 5px;
+  }
 
   /* ── when not to use ── */
   .honest { background: #fff; border: 1px solid var(--line-2); border-radius: 16px; padding: 36px 34px; }
@@ -497,110 +549,209 @@ npm i feather-editor</pre>
     <p class="sec-lede reveal in" style="transition-delay: 270ms;">Each theme is a small CSS file that sets a handful of <code>--fe-*</code> custom properties. Import the ones you want, switch with a single prop — or roll your own in under a minute.</p>
 
     <div class="themes-grid reveal in" style="transition-delay: 270ms;">
-      <div class="theme-card" style="background:#ffffff;color:#1a1917">
-        <div><div class="t-name">light</div><div class="t-sub">default</div></div>
-        <div class="t-swatch"><span style="background:#2f5fd0"></span><span style="background:#fbfaf7"></span><span style="background:#1a1917"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#1a1a1a;color:#e8e6e0">
-        <div><div class="t-name">dark</div><div class="t-sub">neutral</div></div>
-        <div class="t-swatch"><span style="background:#6ea0ff"></span><span style="background:#232323"></span><span style="background:#e8e6e0"></span></div>
-      </div>
-      <div class="theme-card" style="background:#f5ecd9;color:#5a4a3a">
-        <div><div class="t-name">sepia</div><div class="t-sub">warm paper</div></div>
-        <div class="t-swatch"><span style="background:#8b5a2b"></span><span style="background:#efe2c4"></span><span style="background:#5a4a3a"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#0f1729;color:#c5d0e8">
-        <div><div class="t-name">midnight</div><div class="t-sub">deep navy</div></div>
-        <div class="t-swatch"><span style="background:#8fb3ff"></span><span style="background:#162032"></span><span style="background:#c5d0e8"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#1a2820;color:#d3e2d4">
-        <div><div class="t-name">forest</div><div class="t-sub">dark green</div></div>
-        <div class="t-swatch"><span style="background:#7fd17a"></span><span style="background:#213128"></span><span style="background:#d3e2d4"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#0a2540;color:#c8d8eb">
-        <div><div class="t-name">ocean</div><div class="t-sub">deep blue</div></div>
-        <div class="t-swatch"><span style="background:#6fb3ff"></span><span style="background:#103354"></span><span style="background:#c8d8eb"></span></div>
-      </div>
-      <div class="theme-card" style="background:#fff1f3;color:#5a2a35">
-        <div><div class="t-name">rose</div><div class="t-sub">soft pink</div></div>
-        <div class="t-swatch"><span style="background:#c5365e"></span><span style="background:#ffe1e7"></span><span style="background:#5a2a35"></span></div>
-      </div>
-      <div class="theme-card" style="background:#f0f2f5;color:#2e3540">
-        <div><div class="t-name">slate</div><div class="t-sub">cool gray</div></div>
-        <div class="t-swatch"><span style="background:#3a5e85"></span><span style="background:#e3e7ec"></span><span style="background:#2e3540"></span></div>
-      </div>
-      <div class="theme-card" style="background:#fef5e0;color:#5a3f0e">
-        <div><div class="t-name">amber</div><div class="t-sub">warm amber</div></div>
-        <div class="t-swatch"><span style="background:#b45e0a"></span><span style="background:#fbe9bf"></span><span style="background:#5a3f0e"></span></div>
-      </div>
-      <div class="theme-card" style="background:#f5f0ff;color:#3a2658">
-        <div><div class="t-name">lavender</div><div class="t-sub">purple</div></div>
-        <div class="t-swatch"><span style="background:#7a4dd6"></span><span style="background:#ebe1ff"></span><span style="background:#3a2658"></span></div>
-      </div>
-      <div class="theme-card" style="background:#e8f7ef;color:#1f4a36">
-        <div><div class="t-name">mint</div><div class="t-sub">light mint</div></div>
-        <div class="t-swatch"><span style="background:#1f8a5a"></span><span style="background:#d3efde"></span><span style="background:#1f4a36"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#1f1f1f;color:#d0cec9">
-        <div><div class="t-name">charcoal</div><div class="t-sub">deep gray</div></div>
-        <div class="t-swatch"><span style="background:#b9b6af"></span><span style="background:#292929"></span><span style="background:#d0cec9"></span></div>
-      </div>
-      <div class="theme-card" style="background:#faf6ed;color:#3b342a">
-        <div><div class="t-name">paper</div><div class="t-sub">off-white</div></div>
-        <div class="t-swatch"><span style="background:#6b4f1d"></span><span style="background:#f3eddf"></span><span style="background:#3b342a"></span></div>
-      </div>
-      <div class="theme-card" style="background:#fff2e6;color:#5c2b0a">
-        <div><div class="t-name">sunset</div><div class="t-sub">warm orange</div></div>
-        <div class="t-swatch"><span style="background:#d44b1a"></span><span style="background:#ffe2c8"></span><span style="background:#5c2b0a"></span></div>
-      </div>
-      <div class="theme-card" style="background:#eceff4;color:#2e3440">
-        <div><div class="t-name">nordic</div><div class="t-sub">muted blue</div></div>
-        <div class="t-swatch"><span style="background:#5e81ac"></span><span style="background:#e0e4ec"></span><span style="background:#2e3440"></span></div>
-      </div>
-      <div class="theme-card" style="background:#fdf6e3;color:#586e75">
-        <div><div class="t-name">solarized-light</div><div class="t-sub">classic</div></div>
-        <div class="t-swatch"><span style="background:#268bd2"></span><span style="background:#eee8d5"></span><span style="background:#586e75"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#002b36;color:#93a1a1">
-        <div><div class="t-name">solarized-dark</div><div class="t-sub">classic</div></div>
-        <div class="t-swatch"><span style="background:#268bd2"></span><span style="background:#073642"></span><span style="background:#93a1a1"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#282a36;color:#f8f8f2">
-        <div><div class="t-name">dracula</div><div class="t-sub">vibrant</div></div>
-        <div class="t-swatch"><span style="background:#bd93f9"></span><span style="background:#313442"></span><span style="background:#ff79c6"></span></div>
-      </div>
-      <div class="theme-card" style="background:#ffffff;color:#000000">
-        <div><div class="t-name">mono</div><div class="t-sub">high contrast</div></div>
-        <div class="t-swatch"><span style="background:#000000"></span><span style="background:#f5f5f5"></span><span style="background:#000000"></span></div>
-      </div>
-      <div class="theme-card" style="background:#f0e6da;color:#3d2817">
-        <div><div class="t-name">coffee</div><div class="t-sub">brown tones</div></div>
-        <div class="t-swatch"><span style="background:#7c4a1e"></span><span style="background:#e3d3bf"></span><span style="background:#3d2817"></span></div>
-      </div>
-      <div class="theme-card" style="background:#eef3ec;color:#2f4032">
-        <div><div class="t-name">sage</div><div class="t-sub">sage green</div></div>
-        <div class="t-swatch"><span style="background:#4f7c50"></span><span style="background:#dfe7dc"></span><span style="background:#2f4032"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#001a3a;color:#c5d6f0">
-        <div><div class="t-name">cobalt</div><div class="t-sub">deep cobalt</div></div>
-        <div class="t-swatch"><span style="background:#4f9aff"></span><span style="background:#002654"></span><span style="background:#c5d6f0"></span></div>
-      </div>
-      <div class="theme-card" style="background:#f7eed8;color:#5c4a2a">
-        <div><div class="t-name">sand</div><div class="t-sub">sandy beige</div></div>
-        <div class="t-swatch"><span style="background:#a0721f"></span><span style="background:#ede0b9"></span><span style="background:#5c4a2a"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#2a162f;color:#e0c8e8">
-        <div><div class="t-name">plum</div><div class="t-sub">deep plum</div></div>
-        <div class="t-swatch"><span style="background:#d987f0"></span><span style="background:#3a1f42"></span><span style="background:#e0c8e8"></span></div>
-      </div>
-      <div class="theme-card dark-ring" style="background:#050507;color:#b8b6b0">
-        <div><div class="t-name">abyss</div><div class="t-sub">near-black</div></div>
-        <div class="t-swatch"><span style="background:#5fc3ff"></span><span style="background:#0d0d10"></span><span style="background:#b8b6b0"></span></div>
-      </div>
+      <figure class="theme-card" style="--tp-bg:#ffffff;--tp-fg:#1a1917;--tp-bar:#fbfaf7;--tp-line:#e7e3da;--tp-acc:#2f5fd0;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">A clean page.</div><p class="tp-p">A <b>quiet</b> classic — see the <a>link</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">light</span><span class="t-sub">default</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#1a1a1a;--tp-fg:#e8e6e0;--tp-bar:#232323;--tp-line:#2e2e2e;--tp-acc:#6ea0ff;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">After hours.</div><p class="tp-p">Easy on the eyes — <b>focus</b> on the <a>link</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">dark</span><span class="t-sub">neutral</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#f5ecd9;--tp-fg:#5a4a3a;--tp-bar:#efe2c4;--tp-line:#d9c9a7;--tp-acc:#8b5a2b;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Old book.</div><p class="tp-p">Warm pages, <b>steady</b> ink, a tidy <a>margin</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">sepia</span><span class="t-sub">warm paper</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#0f1729;--tp-fg:#c5d0e8;--tp-bar:#162032;--tp-line:#1f2c44;--tp-acc:#8fb3ff;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Past midnight.</div><p class="tp-p">A <b>deep</b> sky, one bright <a>star</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">midnight</span><span class="t-sub">deep navy</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#1a2820;--tp-fg:#d3e2d4;--tp-bar:#213128;--tp-line:#2c3f33;--tp-acc:#7fd17a;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Among the pines.</div><p class="tp-p">A <b>still</b> grove, one bright <a>path</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">forest</span><span class="t-sub">dark green</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#0a2540;--tp-fg:#c8d8eb;--tp-bar:#103354;--tp-line:#1a4570;--tp-acc:#6fb3ff;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Open water.</div><p class="tp-p">A <b>cool</b> tide, a far <a>shore</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">ocean</span><span class="t-sub">deep blue</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#fff1f3;--tp-fg:#5a2a35;--tp-bar:#ffe1e7;--tp-line:#f5bfcb;--tp-acc:#c5365e;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">A small note.</div><p class="tp-p">A <b>soft</b> letter, a folded <a>card</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">rose</span><span class="t-sub">soft pink</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#f0f2f5;--tp-fg:#2e3540;--tp-bar:#e3e7ec;--tp-line:#cdd3da;--tp-acc:#3a5e85;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Notebook.</div><p class="tp-p">A <b>clean</b> margin and one quiet <a>link</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">slate</span><span class="t-sub">cool gray</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#fef5e0;--tp-fg:#5a3f0e;--tp-bar:#fbe9bf;--tp-line:#efd494;--tp-acc:#b45e0a;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Warm light.</div><p class="tp-p">A <b>honeyed</b> afternoon, a thin <a>thread</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">amber</span><span class="t-sub">warm amber</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#f5f0ff;--tp-fg:#3a2658;--tp-bar:#ebe1ff;--tp-line:#d6c3f0;--tp-acc:#7a4dd6;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Soft hours.</div><p class="tp-p">A <b>gentle</b> hush, a single <a>page</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">lavender</span><span class="t-sub">purple</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#e8f7ef;--tp-fg:#1f4a36;--tp-bar:#d3efde;--tp-line:#aeddc4;--tp-acc:#1f8a5a;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Garden notes.</div><p class="tp-p">A <b>fresh</b> leaf, a bright green <a>stem</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">mint</span><span class="t-sub">light mint</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#1f1f1f;--tp-fg:#d0cec9;--tp-bar:#292929;--tp-line:#353535;--tp-acc:#b9b6af;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Studio at night.</div><p class="tp-p">A <b>quiet</b> draft, one steady <a>line</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">charcoal</span><span class="t-sub">deep gray</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#faf6ed;--tp-fg:#3b342a;--tp-bar:#f3eddf;--tp-line:#e0d7c2;--tp-acc:#6b4f1d;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">A fresh sheet.</div><p class="tp-p">A <b>plain</b> draft, one careful <a>edit</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">paper</span><span class="t-sub">off-white</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#fff2e6;--tp-fg:#5c2b0a;--tp-bar:#ffe2c8;--tp-line:#f7c69a;--tp-acc:#d44b1a;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Last light.</div><p class="tp-p">A <b>warm</b> hour, a long red <a>line</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">sunset</span><span class="t-sub">warm orange</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#eceff4;--tp-fg:#2e3440;--tp-bar:#e0e4ec;--tp-line:#c9d0dd;--tp-acc:#5e81ac;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Calm by default.</div><p class="tp-p">A <b>measured</b> draft, one tidy <a>link</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">nordic</span><span class="t-sub">muted blue</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#fdf6e3;--tp-fg:#586e75;--tp-bar:#eee8d5;--tp-line:#d9d2bd;--tp-acc:#268bd2;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Long sessions.</div><p class="tp-p">A <b>balanced</b> palette, an even <a>line</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">solarized-light</span><span class="t-sub">classic</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#002b36;--tp-fg:#93a1a1;--tp-bar:#073642;--tp-line:#0d4351;--tp-acc:#268bd2;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Late terminal.</div><p class="tp-p">A <b>calm</b> chord, a blue <a>cursor</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">solarized-dark</span><span class="t-sub">classic</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#282a36;--tp-fg:#f8f8f2;--tp-bar:#313442;--tp-line:#44475a;--tp-acc:#bd93f9;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">After dark.</div><p class="tp-p">A <b>bold</b> draft, a purple <a>link</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">dracula</span><span class="t-sub">vibrant</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#ffffff;--tp-fg:#000000;--tp-bar:#f5f5f5;--tp-line:#000000;--tp-acc:#000000;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Ink on paper.</div><p class="tp-p">A <b>sharp</b> sentence, one black <a>line</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">mono</span><span class="t-sub">high contrast</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#f0e6da;--tp-fg:#3d2817;--tp-bar:#e3d3bf;--tp-line:#c8b298;--tp-acc:#7c4a1e;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Slow morning.</div><p class="tp-p">A <b>warm</b> mug, a folded <a>napkin</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">coffee</span><span class="t-sub">brown tones</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#eef3ec;--tp-fg:#2f4032;--tp-bar:#dfe7dc;--tp-line:#c2d0bf;--tp-acc:#4f7c50;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Slow garden.</div><p class="tp-p">A <b>green</b> draft, a soft <a>trim</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">sage</span><span class="t-sub">sage green</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#001a3a;--tp-fg:#c5d6f0;--tp-bar:#002654;--tp-line:#003572;--tp-acc:#4f9aff;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Wired in.</div><p class="tp-p">A <b>cool</b> field, one bright <a>signal</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">cobalt</span><span class="t-sub">deep cobalt</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#f7eed8;--tp-fg:#5c4a2a;--tp-bar:#ede0b9;--tp-line:#d8c890;--tp-acc:#a0721f;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Long shore.</div><p class="tp-p">A <b>dry</b> wind, a clear <a>line</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">sand</span><span class="t-sub">sandy beige</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#2a162f;--tp-fg:#e0c8e8;--tp-bar:#3a1f42;--tp-line:#4a2952;--tp-acc:#d987f0;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Late hour.</div><p class="tp-p">A <b>rich</b> draft, one bright <a>seam</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">plum</span><span class="t-sub">deep plum</span></figcaption>
+      </figure>
+
+      <figure class="theme-card" style="--tp-bg:#050507;--tp-fg:#b8b6b0;--tp-bar:#0d0d10;--tp-line:#18181c;--tp-acc:#5fc3ff;">
+        <div class="tp">
+          <div class="tp-bar"><span class="tp-btn b">B</span><span class="tp-btn i">I</span><span class="tp-btn">H2</span><span class="tp-btn">•</span></div>
+          <div class="tp-body"><div class="tp-h">Off the grid.</div><p class="tp-p">A <b>deep</b> well, one cold <a>spark</a>.</p></div>
+        </div>
+        <figcaption><span class="t-name">abyss</span><span class="t-sub">near-black</span></figcaption>
+      </figure>
     </div>
 
-    <p class="bar-note reveal in" style="transition-delay: 270ms; margin-top: 28px;">
-      <code>import "feather-editor/themes/dracula.css"</code> &nbsp;·&nbsp; <code>&lt;Editor theme="dracula" /&gt;</code>
+    <p class="theme-hint reveal in" style="transition-delay: 270ms;">
+      Import the theme CSS, then pass the name as a prop: <code>import "feather-editor/themes/dracula.css"</code> and <code>&lt;Editor theme="dracula" /&gt;</code>.
     </p>
   </div>
 </section>
