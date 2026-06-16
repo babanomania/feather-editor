@@ -1,0 +1,13 @@
+.feather-theme-plum.feather-editor,
+.feather-theme-plum .feather-editor {
+  --fe-bg: #2a162f;
+  --fe-color: #e0c8e8;
+  --fe-bar-bg: #3a1f42;
+  --fe-bar-border: #4a2952;
+  --fe-btn-color: #e0c8e8;
+  --fe-btn-hover-bg: #4a2952;
+  --fe-accent: #d987f0;
+  --fe-border: #4a2952;
+  --fe-heading-color: #ffffff;
+  --fe-selection-bg: rgba(217, 135, 240, 0.25);
+}

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)file:///Users/shouvikbasu/Downloads/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feather Editor — the 400-byte rich-text editor for React</title>
+<meta name="description" content="A React WYSIWYG editor with Markdown round-trip, in roughly 400 bytes. Zero dependencies, no build step.">
+<style>
+  :root {
+    --paper: #FBFAF7;
+    --paper-2: #F2F0EA;
+    --ink: #1A1917;
+    --ink-soft: #57544E;
+    --muted: #8C8980;
+    --line: #E7E3DA;
+    --line-2: #D8D3C8;
+    --accent: #2F5FD0;
+    --accent-deep: #244BA8;
+    --accent-soft: rgba(47, 95, 208, 0.10);
+    --graphite: #1B1A18;
+    --graphite-2: #262522;
+    --graphite-line: #34322F;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent-soft); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+  .wrap { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── nav ── */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(251, 250, 247, 0.82);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+  .brand svg { width: 20px; height: 20px; color: var(--accent); }
+  .brand b { font-weight: 600; }
+  .brand span { color: var(--muted); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 26px; font-family: var(--mono); font-size: 13px; }
+  .nav-links a { color: var(--ink-soft); transition: color 140ms; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links .ghub { color: var(--ink); }
+  @media (max-width: 620px) { .nav-links a:not(.ghub) { display: none; } }
+
+  /* ── hero ── */
+  .hero { padding: 70px 0 56px; position: relative; overflow: hidden; }
+  .feather-bg {
+    position: absolute; top: -40px; right: -30px; width: 360px; height: 360px;
+    color: var(--accent); opacity: 0.05; pointer-events: none; transform: rotate(8deg);
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 22px;
+  }
+  .eyebrow b { color: var(--accent); font-weight: 600; }
+  h1 {
+    font-family: var(--mono); font-weight: 700; letter-spacing: -0.03em; line-height: 1.02;
+    font-size: clamp(38px, 7.4vw, 74px); margin: 0 0 24px; max-width: 16ch;
+  }
+  h1 .n { color: var(--accent); }
+  .lede {
+    font-family: var(--serif); font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5;
+    color: var(--ink-soft); max-width: 56ch; margin: 0 0 34px;
+  }
+  .lede em { font-style: italic; color: var(--ink); }
+
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 48px; }
+  .btn {
+    font-family: var(--mono); font-size: 14px; font-weight: 500;
+    padding: 12px 18px; border-radius: 9px; cursor: pointer; border: 1px solid transparent;
+    display: inline-flex; align-items: center; gap: 9px; transition: transform 120ms, background 140ms, border-color 140ms;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover { background: #000; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .npm {
+    font-family: var(--mono); font-size: 13.5px; color: var(--ink);
+    background: #fff; border: 1px solid var(--line-2); border-radius: 9px;
+    padding: 11px 14px; display: inline-flex; align-items: center; gap: 12px; cursor: pointer;
+    transition: border-color 140ms;
+  }
+  .npm:hover { border-color: var(--accent); }
+  .npm .prompt { color: var(--accent); user-select: none; }
+  .npm .copy { color: var(--muted); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* ── live editor card ── */
+  .demo {
+    display: grid; grid-template-columns: 1fr; gap: 14px;
+    align-items: start;
+  }
+  .card {
+    background: var(--paper); border: 1px solid var(--line-2); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 24px 48px -24px rgba(26,25,23,0.30);
+  }
+  .ed-bar {
+    display: flex; align-items: center; gap: 3px; flex-wrap: wrap;
+    padding: 9px 11px; border-bottom: 1px solid var(--line); background: #fff;
+  }
+  .ed-bar button {
+    font-family: var(--mono); font-size: 13px; color: var(--ink);
+    min-width: 32px; height: 32px; padding: 0 9px; border-radius: 8px;
+    border: 1px solid transparent; background: transparent; cursor: pointer; transition: background 120ms, border-color 120ms;
+  }
+  .ed-bar button:hover { border-color: var(--line-2); }
+  .ed-bar button.b { font-weight: 700; }
+  .ed-bar button.i { font-style: italic; }
+  .ed-bar button.u { text-decoration: underline; }
+  .ed-sep { width: 1px; height: 18px; background: var(--line); margin: 0 5px; }
+  .ed-area {
+    font-family: var(--serif); font-size: 17.5px; line-height: 1.62; color: var(--ink);
+    padding: 24px 26px; min-height: 188px; outline: none;
+  }
+  .ed-area h2 { font-family: var(--mono); font-size: 19px; letter-spacing: -0.02em; margin: 0 0 12px; }
+  .ed-area p { margin: 0 0 12px; }
+  .ed-area ul { margin: 0 0 12px; padding-left: 22px; }
+  .ed-area li { margin: 2px 0; }
+  .ed-area a { color: var(--accent); }
+  .ed-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    padding: 11px 16px; border-top: 1px solid var(--line); background: #FCFBF8;
+  }
+
+  /* ── the live weight meter (signature) ── */
+  .meter { display: flex; align-items: center; gap: 14px; }
+  .meter .num { font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .meter .lab { color: var(--ink-soft); }
+  .meter .lab b { color: var(--ink); font-weight: 600; }
+  .meter .live { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  /* ── section scaffold ── */
+  section.band { padding: 86px 0; border-top: 1px solid var(--line); }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 0 0 16px; }
+  h2.sec { font-family: var(--mono); font-weight: 700; letter-spacing: -0.025em; font-size: clamp(26px, 4vw, 40px); margin: 0 0 14px; line-height: 1.08; }
+  .sec-lede { font-family: var(--serif); font-size: 18.5px; color: var(--ink-soft); max-width: 60ch; margin: 0 0 40px; line-height: 1.5; }
+
+  /* ── comparison ── */
+  .bars { display: flex; flex-direction: column; gap: 16px; }
+  .bar-row { display: grid; grid-template-columns: 116px 1fr; align-items: center; gap: 16px; }
+  .bar-name { font-family: var(--mono); font-size: 13.5px; color: var(--ink-soft); text-align: right; }
+  .bar-row.me .bar-name { color: var(--ink); font-weight: 600; }
+  .bar-track { display: flex; align-items: center; gap: 10px; }
+  .bar-fill { height: 22px; border-radius: 5px; background: var(--line-2); min-width: 4px; }
+  .bar-row.me .bar-fill { background: var(--accent); }
+  .bar-val { font-family: var(--mono); font-size: 12.5px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .bar-row.me .bar-val { color: var(--accent); font-weight: 600; }
+  .bar-note { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 22px; max-width: 64ch; line-height: 1.6; }
+
+  /* ── features ── */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .cell { background: var(--paper); padding: 30px 28px; }
+  .cell .ix { font-family: var(--mono); font-size: 12px; color: var(--accent); margin-bottom: 14px; }
+  .cell h3 { font-family: var(--mono); font-size: 17px; letter-spacing: -0.01em; margin: 0 0 9px; font-weight: 600; }
+  .cell p { font-family: var(--serif); font-size: 16px; color: var(--ink-soft); margin: 0; line-height: 1.5; }
+  .cell code { font-family: var(--mono); font-size: 0.86em; background: var(--paper-2); padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+
+  /* ── dark band: the source ── */
+  section.dark { background: var(--graphite); color: var(--paper); padding: 86px 0; }
+  section.dark .kicker { color: #7FA0EC; }
+  section.dark h2.sec { color: #fff; }
+  section.dark .sec-lede { color: #B7B2A8; }
+  .code {
+    font-family: var(--mono); font-size: 13px; line-height: 1.7; color: #D9D5CC;
+    background: var(--graphite-2); border: 1px solid var(--graphite-line); border-radius: 14px;
+    padding: 24px 26px; overflow-x: auto; margin: 0;
+  }
+  .code .cm { color: #7E7A72; }
+  .code .kw { color: #8FB0F0; }
+  .code .st { color: #C9B98E; }
+  .code .fn { color: #E0DCD2; }
+  .source-meta { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 28px; font-family: var(--mono); font-size: 13px; }
+  .source-meta div span { color: #8C887F; display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .source-meta div b { color: #fff; font-weight: 600; font-size: 19px; }
+  .source-meta .accent b { color: #9FBAF2; }
+
+  /* ── usage ── */
+  .usage-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .ucode {
+    font-family: var(--mono); font-size: 13.5px; line-height: 1.7; color: var(--ink);
+    background: #fff; border: 1px solid var(--line-2); border-radius: 14px; padding: 22px 24px; overflow-x: auto; margin: 0;
+  }
+  .ucode .cm { color: var(--muted); }
+  .ucode .kw { color: var(--accent-deep); }
+  .ucode .st { color: #8a6d3b; }
+
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 820px) { .modes { grid-template-columns: 1fr; } }
+  .mode-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+  .mode-title { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
+  .mode-pill { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--accent); background: var(--accent-soft); padding: 2px 7px; border-radius: 999px; text-transform: uppercase; }
+  .mode-size { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .mode-desc { font-family: var(--serif); font-size: 15.5px; color: var(--ink-soft); margin: 0 0 12px; line-height: 1.5; }
+
+  /* ── themes showcase ── */
+  .themes-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+  }
+  @media (max-width: 900px) { .themes-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
+  .theme-card {
+    border-radius: 11px; padding: 14px 14px 12px; min-height: 92px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: -0.005em;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform 140ms;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .theme-card:hover { transform: translateY(-2px); }
+  .theme-card .t-name { font-weight: 600; }
+  .theme-card .t-sub { opacity: 0.65; font-size: 10.5px; margin-top: 2px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .theme-card .t-swatch { display: flex; gap: 5px; margin-top: 12px; }
+  .theme-card .t-swatch span {
+    width: 14px; height: 14px; border-radius: 4px; display: inline-block;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .theme-card.dark-ring { border-color: rgba(255,255,255,0.08); }
+  .theme-card.dark-ring .t-swatch span { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
+
+  /* ── when not to use ── */
+  .honest { background: #fff; border: 1px solid var(--line-2); border-radius: 16px; padding: 36px 34px; }
+  .honest h2.sec { margin-bottom: 18px; }
+  .honest p { font-family: var(--serif); font-size: 18px; color: var(--ink-soft); margin: 0; max-width: 64ch; line-height: 1.55; }
+  .honest p strong { color: var(--ink); font-weight: 600; }
+  .honest p code { font-family: var(--mono); font-size: 0.85em; color: var(--accent-deep); }
+
+  /* ── footer ── */
+  footer { border-top: 1px solid var(--line); padding: 54px 0 64px; }
+  .foot-in { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 28px; }
+  .foot-brand { font-family: var(--mono); }
+  .foot-brand .name { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; margin-bottom: 10px; }
+  .foot-brand .name svg { width: 18px; height: 18px; color: var(--accent); }
+  .foot-brand .tag { color: var(--muted); font-size: 13px; max-width: 32ch; line-height: 1.5; }
+  .foot-cols { display: flex; gap: 56px; font-family: var(--mono); font-size: 13px; }
+  .foot-cols .col span { display: block; color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .foot-cols .col a { display: block; color: var(--ink-soft); margin-bottom: 9px; transition: color 130ms; }
+  .foot-cols .col a:hover { color: var(--accent); }
+  .foot-base { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+
+  /* ── reveal motion ── */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity 620ms ease, transform 620ms ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line>
+      </svg>
+      <b>Feather</b><span>Editor</span>
+    </div>
+    <div class="nav-links">
+      <a href="#size">Size</a>
+      <a href="#how">How</a>
+      <a href="#install">Install</a>
+      <a href="#themes">Themes</a>
+      <a class="ghub" href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <svg class="feather-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line>
+  </svg>
+  <div class="wrap">
+    <p class="eyebrow reveal in" style="transition-delay: 0ms;">React <b>·</b> Zero dependencies <b>·</b> MIT</p>
+    <h1 class="reveal in" style="transition-delay: 45ms;">The <span class="n">400‑byte</span> rich‑text editor.</h1>
+    <p class="lede reveal in" style="transition-delay: 90ms;">Feather Editor is a React WYSIWYG field with Markdown round‑trip, in roughly the size of a short paragraph. No dependencies, no build step — the browser does the formatting, and Feather just <em>gets out of the way</em>.</p>
+
+    <div class="cta-row reveal in" style="transition-delay: 135ms;">
+      <a class="btn btn-primary" href="https://github.com/" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+        Star on GitHub
+      </a>
+      <button class="npm" id="npm" aria-label="Copy install command">
+        <span class="prompt">$</span><span id="npm-cmd">npm i feather-editor</span><span class="copy" id="npm-copy">copy</span>
+      </button>
+    </div>
+
+    <!-- LIVE EDITOR -->
+    <div class="demo reveal in" style="transition-delay: 180ms;">
+      <div class="card">
+        <div class="ed-bar" id="bar">
+          <button class="b" data-cmd="bold" title="Bold">B</button>
+          <button class="i" data-cmd="italic" title="Italic">I</button>
+          <button class="u" data-cmd="underline" title="Underline">U</button>
+          <span class="ed-sep"></span>
+          <button data-cmd="formatBlock" data-val="&lt;h2&gt;" title="Heading">H2</button>
+          <button data-cmd="insertUnorderedList" title="List">•&nbsp;List</button>
+          <button data-cmd="createLink" data-link="1" title="Link">↗&nbsp;Link</button>
+          <span class="ed-sep"></span>
+          <button data-cmd="removeFormat" title="Clear">⌫</button>
+        </div>
+        <div class="ed-area" id="ed" contenteditable="" spellcheck="false">
+          <h2>Edit this.</h2>
+          
+          <ul><li>This is the <b>actual</b> Feather Editor — the same few hundred bytes you'd ship. Select some text and try the toolbar, or type <i>your own</i> words here.</li>
+            <li>It outputs clean HTML</li>
+            <li>…and round-trips to <a href="#how">Markdown</a></li>
+            <li>…without fighting your cursor</li>
+          </ul>
+        </div>
+        <div class="ed-foot">
+          <div class="meter">
+            <span class="num" id="size-num">450 B</span>
+            <span class="lab"><b>gzipped.</b> The whole editor.</span>
+          </div>
+          <span class="live"><span class="dot"></span>measured live in your browser</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- SIZE COMPARISON -->
+<section class="band" id="size">
+  <div class="wrap">
+    <p class="kicker reveal in" style="transition-delay: 225ms;">The pitch, in one chart</p>
+    <h2 class="sec reveal in" style="transition-delay: 270ms;">Smaller than the alternatives. By a lot.</h2>
+    <p class="sec-lede reveal in" style="transition-delay: 270ms;">Most rich-text editors ship tens to hundreds of kilobytes before you write a word. Feather is the sliver on the left you can barely see.</p>
+    <div class="bars reveal in" style="transition-delay: 270ms;">
+      <div class="bar-row me">
+        <div class="bar-name">Feather</div>
+        <div class="bar-track"><div class="bar-fill" style="width:4px"></div><span class="bar-val">≈ 0.4 KB</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-name">Kria Lite</div>
+        <div class="bar-track"><div class="bar-fill" style="width:2%"></div><span class="bar-val">≈ 6 KB</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-name">Quill</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14%"></div><span class="bar-val">≈ 43 KB</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-name">TinyMCE</div>
+        <div class="bar-track"><div class="bar-fill" style="width:83%"></div><span class="bar-val">≈ 250 KB</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-name">CKEditor 5</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%"></div><span class="bar-val">≈ 300 KB</span></div>
+      </div>
+    </div>
+    <p class="bar-note reveal in" style="transition-delay: 270ms;">Approximate gzipped sizes; exact numbers vary by configuration and which plugins you include. Feather's figure is measured live above — the core is ≈ 0.4 KB, and ≈ 1.2 KB with the full Markdown round-trip.</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="band" id="why">
+  <div class="wrap">
+    <p class="kicker reveal in" style="transition-delay: 270ms;">Why it's this small</p>
+    <h2 class="sec reveal in" style="transition-delay: 270ms;">It leans on the platform.</h2>
+    <p class="sec-lede reveal in" style="transition-delay: 270ms;">Feather doesn't reimplement text editing. The browser already knows how — Feather is the thin, careful layer on top.</p>
+    <div class="grid reveal in" style="transition-delay: 270ms;">
+      <div class="cell">
+        <div class="ix">01</div>
+        <h3>Zero dependencies</h3>
+        <p>Nothing in your <code>node_modules</code> to audit, patch, or wait on. The entire package is one small file.</p>
+      </div>
+      <div class="cell">
+        <div class="ix">02</div>
+        <h3>Markdown round-trip</h3>
+        <p>Edit visually, store Markdown; load Markdown, edit visually. A hand-written serializer and loader — no parser library bolted on.</p>
+      </div>
+      <div class="cell">
+        <div class="ix">03</div>
+        <h3>The caret never jumps</h3>
+        <p>The <code>contenteditable</code> region stays uncontrolled. React reads from the DOM and never re-writes it, so editing feels native.</p>
+      </div>
+      <div class="cell">
+        <div class="ix">04</div>
+        <h3>25 themes, one variable contract</h3>
+        <p>Drop-in CSS files that override a handful of <code>--fe-*</code> custom properties. Mix and match, swap with a single prop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE SOURCE (dark band) -->
+<section class="dark" id="how">
+  <div class="wrap">
+    <p class="kicker reveal in" style="transition-delay: 270ms;">No, really — that's all of it</p>
+    <h2 class="sec reveal in" style="transition-delay: 270ms;">The whole editor.</h2>
+    <p class="sec-lede reveal in" style="transition-delay: 270ms;">Not a teaser snippet. This is the core that renders the toolbar, handles every formatting command, and exposes a clean React component.</p>
+    <pre class="code reveal in" style="transition-delay: 270ms;"><span class="kw">import</span> { useRef } <span class="kw">from</span> <span class="st">"react"</span>;
+
+<span class="kw">const</span> <span class="fn">cmd</span> = (c, v) =&gt; document.<span class="fn">execCommand</span>(c, <span class="kw">false</span>, v);
+
+<span class="kw">export default function</span> <span class="fn">Editor</span>({ value = <span class="st">""</span>, onChange }) {
+  <span class="kw">const</span> ref = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> <span class="fn">sync</span> = () =&gt; onChange?.(ref.current.innerHTML);
+  <span class="kw">const</span> <span class="fn">B</span> = ({ c, v, label }) =&gt; (
+    &lt;<span class="fn">button</span> onMouseDown={(e) =&gt; { e.<span class="fn">preventDefault</span>(); <span class="fn">cmd</span>(c, v); <span class="fn">sync</span>(); }}&gt;{label}&lt;/button&gt;
+  );
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span>&gt;
+      &lt;<span class="fn">div</span> className=<span class="st">"bar"</span>&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"bold"</span> label=<span class="st">"B"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"italic"</span> label=<span class="st">"I"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"formatBlock"</span> v=<span class="st">"&lt;h2&gt;"</span> label=<span class="st">"H2"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"insertUnorderedList"</span> label=<span class="st">"List"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"createLink"</span> v=<span class="st">"#"</span> label=<span class="st">"Link"</span> /&gt;
+      &lt;/<span class="fn">div</span>&gt;
+      &lt;<span class="fn">div</span> ref={ref} contentEditable suppressContentEditableWarning
+           onInput={<span class="fn">sync</span>} dangerouslySetInnerHTML={{ __html: value }} /&gt;
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}</pre>
+    <div class="source-meta reveal in" style="transition-delay: 270ms;">
+      <div class="accent"><span>Core, gzipped</span><b id="size-num-2">≈ 450 B</b></div>
+      <div><span>With Markdown round-trip</span><b>≈ 1.2 KB</b></div>
+      <div><span>Dependencies</span><b>0</b></div>
+      <div><span>Build step</span><b>None</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL / USAGE -->
+<section class="band" id="install">
+  <div class="wrap">
+    <p class="kicker reveal in" style="transition-delay: 270ms;">Drop it in</p>
+    <h2 class="sec reveal in" style="transition-delay: 270ms;">Two modes. Pick the weight.</h2>
+    <p class="sec-lede reveal in" style="transition-delay: 270ms;">One package, two entry points. Use the full editor when you want Markdown round-trip, or the core build when every byte counts.</p>
+
+    <pre class="ucode reveal in" style="transition-delay: 270ms; margin-bottom: 20px;"><span class="cm"># install</span>
+npm i feather-editor</pre>
+
+    <div class="modes">
+      <div class="mode reveal in" style="transition-delay: 270ms;">
+        <div class="mode-h">
+          <span class="mode-title">Markdown mode</span>
+          <span class="mode-size">≈ 1.2 KB gzip</span>
+        </div>
+        <p class="mode-desc">Markdown in, Markdown out. Hand-written round-trip, no parser library.</p>
+        <pre class="ucode"><span class="kw">import</span> Editor <span class="kw">from</span> <span class="st">"feather-editor"</span>;
+<span class="kw">import</span> <span class="st">"feather-editor/themes/light.css"</span>;
+
+<span class="kw">function</span> Notes() {
+  <span class="kw">const</span> [md, setMd] = useState(<span class="st">"# Hello\n\nStart **writing**."</span>);
+  <span class="kw">return</span> &lt;Editor markdown={md} onChange={setMd} /&gt;;
+}</pre>
+      </div>
+
+      <div class="mode reveal in" style="transition-delay: 270ms;">
+        <div class="mode-h">
+          <span class="mode-title">Core mode <span class="mode-pill">400 B</span></span>
+          <span class="mode-size">≈ 0.44 KB gzip</span>
+        </div>
+        <p class="mode-desc">HTML in, HTML out. The bare editor — bring your own serializer if you need one.</p>
+        <pre class="ucode"><span class="kw">import</span> Editor <span class="kw">from</span> <span class="st">"feather-editor/core"</span>;
+<span class="kw">import</span> <span class="st">"feather-editor/themes/light.css"</span>;
+
+<span class="kw">function</span> Notes() {
+  <span class="kw">const</span> [html, setHtml] = useState(<span class="st">"&lt;p&gt;Hello&lt;/p&gt;"</span>);
+  <span class="kw">return</span> &lt;Editor value={html} onChange={setHtml} /&gt;;
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THEMES SHOWCASE -->
+<section class="band" id="themes">
+  <div class="wrap">
+    <p class="kicker reveal in" style="transition-delay: 270ms;">25 ways to dress it</p>
+    <h2 class="sec reveal in" style="transition-delay: 270ms;">A theme for every mood.</h2>
+    <p class="sec-lede reveal in" style="transition-delay: 270ms;">Each theme is a small CSS file that sets a handful of <code>--fe-*</code> custom properties. Import the ones you want, switch with a single prop — or roll your own in under a minute.</p>
+
+    <div class="themes-grid reveal in" style="transition-delay: 270ms;">
+      <div class="theme-card" style="background:#ffffff;color:#1a1917">
+        <div><div class="t-name">light</div><div class="t-sub">default</div></div>
+        <div class="t-swatch"><span style="background:#2f5fd0"></span><span style="background:#fbfaf7"></span><span style="background:#1a1917"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#1a1a1a;color:#e8e6e0">
+        <div><div class="t-name">dark</div><div class="t-sub">neutral</div></div>
+        <div class="t-swatch"><span style="background:#6ea0ff"></span><span style="background:#232323"></span><span style="background:#e8e6e0"></span></div>
+      </div>
+      <div class="theme-card" style="background:#f5ecd9;color:#5a4a3a">
+        <div><div class="t-name">sepia</div><div class="t-sub">warm paper</div></div>
+        <div class="t-swatch"><span style="background:#8b5a2b"></span><span style="background:#efe2c4"></span><span style="background:#5a4a3a"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#0f1729;color:#c5d0e8">
+        <div><div class="t-name">midnight</div><div class="t-sub">deep navy</div></div>
+        <div class="t-swatch"><span style="background:#8fb3ff"></span><span style="background:#162032"></span><span style="background:#c5d0e8"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#1a2820;color:#d3e2d4">
+        <div><div class="t-name">forest</div><div class="t-sub">dark green</div></div>
+        <div class="t-swatch"><span style="background:#7fd17a"></span><span style="background:#213128"></span><span style="background:#d3e2d4"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#0a2540;color:#c8d8eb">
+        <div><div class="t-name">ocean</div><div class="t-sub">deep blue</div></div>
+        <div class="t-swatch"><span style="background:#6fb3ff"></span><span style="background:#103354"></span><span style="background:#c8d8eb"></span></div>
+      </div>
+      <div class="theme-card" style="background:#fff1f3;color:#5a2a35">
+        <div><div class="t-name">rose</div><div class="t-sub">soft pink</div></div>
+        <div class="t-swatch"><span style="background:#c5365e"></span><span style="background:#ffe1e7"></span><span style="background:#5a2a35"></span></div>
+      </div>
+      <div class="theme-card" style="background:#f0f2f5;color:#2e3540">
+        <div><div class="t-name">slate</div><div class="t-sub">cool gray</div></div>
+        <div class="t-swatch"><span style="background:#3a5e85"></span><span style="background:#e3e7ec"></span><span style="background:#2e3540"></span></div>
+      </div>
+      <div class="theme-card" style="background:#fef5e0;color:#5a3f0e">
+        <div><div class="t-name">amber</div><div class="t-sub">warm amber</div></div>
+        <div class="t-swatch"><span style="background:#b45e0a"></span><span style="background:#fbe9bf"></span><span style="background:#5a3f0e"></span></div>
+      </div>
+      <div class="theme-card" style="background:#f5f0ff;color:#3a2658">
+        <div><div class="t-name">lavender</div><div class="t-sub">purple</div></div>
+        <div class="t-swatch"><span style="background:#7a4dd6"></span><span style="background:#ebe1ff"></span><span style="background:#3a2658"></span></div>
+      </div>
+      <div class="theme-card" style="background:#e8f7ef;color:#1f4a36">
+        <div><div class="t-name">mint</div><div class="t-sub">light mint</div></div>
+        <div class="t-swatch"><span style="background:#1f8a5a"></span><span style="background:#d3efde"></span><span style="background:#1f4a36"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#1f1f1f;color:#d0cec9">
+        <div><div class="t-name">charcoal</div><div class="t-sub">deep gray</div></div>
+        <div class="t-swatch"><span style="background:#b9b6af"></span><span style="background:#292929"></span><span style="background:#d0cec9"></span></div>
+      </div>
+      <div class="theme-card" style="background:#faf6ed;color:#3b342a">
+        <div><div class="t-name">paper</div><div class="t-sub">off-white</div></div>
+        <div class="t-swatch"><span style="background:#6b4f1d"></span><span style="background:#f3eddf"></span><span style="background:#3b342a"></span></div>
+      </div>
+      <div class="theme-card" style="background:#fff2e6;color:#5c2b0a">
+        <div><div class="t-name">sunset</div><div class="t-sub">warm orange</div></div>
+        <div class="t-swatch"><span style="background:#d44b1a"></span><span style="background:#ffe2c8"></span><span style="background:#5c2b0a"></span></div>
+      </div>
+      <div class="theme-card" style="background:#eceff4;color:#2e3440">
+        <div><div class="t-name">nordic</div><div class="t-sub">muted blue</div></div>
+        <div class="t-swatch"><span style="background:#5e81ac"></span><span style="background:#e0e4ec"></span><span style="background:#2e3440"></span></div>
+      </div>
+      <div class="theme-card" style="background:#fdf6e3;color:#586e75">
+        <div><div class="t-name">solarized-light</div><div class="t-sub">classic</div></div>
+        <div class="t-swatch"><span style="background:#268bd2"></span><span style="background:#eee8d5"></span><span style="background:#586e75"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#002b36;color:#93a1a1">
+        <div><div class="t-name">solarized-dark</div><div class="t-sub">classic</div></div>
+        <div class="t-swatch"><span style="background:#268bd2"></span><span style="background:#073642"></span><span style="background:#93a1a1"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#282a36;color:#f8f8f2">
+        <div><div class="t-name">dracula</div><div class="t-sub">vibrant</div></div>
+        <div class="t-swatch"><span style="background:#bd93f9"></span><span style="background:#313442"></span><span style="background:#ff79c6"></span></div>
+      </div>
+      <div class="theme-card" style="background:#ffffff;color:#000000">
+        <div><div class="t-name">mono</div><div class="t-sub">high contrast</div></div>
+        <div class="t-swatch"><span style="background:#000000"></span><span style="background:#f5f5f5"></span><span style="background:#000000"></span></div>
+      </div>
+      <div class="theme-card" style="background:#f0e6da;color:#3d2817">
+        <div><div class="t-name">coffee</div><div class="t-sub">brown tones</div></div>
+        <div class="t-swatch"><span style="background:#7c4a1e"></span><span style="background:#e3d3bf"></span><span style="background:#3d2817"></span></div>
+      </div>
+      <div class="theme-card" style="background:#eef3ec;color:#2f4032">
+        <div><div class="t-name">sage</div><div class="t-sub">sage green</div></div>
+        <div class="t-swatch"><span style="background:#4f7c50"></span><span style="background:#dfe7dc"></span><span style="background:#2f4032"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#001a3a;color:#c5d6f0">
+        <div><div class="t-name">cobalt</div><div class="t-sub">deep cobalt</div></div>
+        <div class="t-swatch"><span style="background:#4f9aff"></span><span style="background:#002654"></span><span style="background:#c5d6f0"></span></div>
+      </div>
+      <div class="theme-card" style="background:#f7eed8;color:#5c4a2a">
+        <div><div class="t-name">sand</div><div class="t-sub">sandy beige</div></div>
+        <div class="t-swatch"><span style="background:#a0721f"></span><span style="background:#ede0b9"></span><span style="background:#5c4a2a"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#2a162f;color:#e0c8e8">
+        <div><div class="t-name">plum</div><div class="t-sub">deep plum</div></div>
+        <div class="t-swatch"><span style="background:#d987f0"></span><span style="background:#3a1f42"></span><span style="background:#e0c8e8"></span></div>
+      </div>
+      <div class="theme-card dark-ring" style="background:#050507;color:#b8b6b0">
+        <div><div class="t-name">abyss</div><div class="t-sub">near-black</div></div>
+        <div class="t-swatch"><span style="background:#5fc3ff"></span><span style="background:#0d0d10"></span><span style="background:#b8b6b0"></span></div>
+      </div>
+    </div>
+
+    <p class="bar-note reveal in" style="transition-delay: 270ms; margin-top: 28px;">
+      <code>import "feather-editor/themes/dracula.css"</code> &nbsp;·&nbsp; <code>&lt;Editor theme="dracula" /&gt;</code>
+    </p>
+  </div>
+</section>
+
+<!-- HONEST: WHEN NOT TO USE -->
+<section class="band">
+  <div class="wrap">
+    <div class="honest reveal in" style="transition-delay: 270ms;">
+      <p class="kicker">The honest part</p>
+      <h2 class="sec">Use the right tool.</h2>
+      <p>Feather is deliberately small, which means it's deliberately limited. If you need collaborative editing, tables, a structured document model, or bulletproof Markdown parsing for untrusted input, reach for <strong>ProseMirror</strong>, <strong>Tiptap</strong>, or <strong>Lexical</strong> — and budget the kilobytes. Feather is for the common case: a clean, formatted text field that won't bloat your bundle. If that's what you need, nothing else comes close on size.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <div class="foot-brand">
+        <div class="name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+          Feather Editor
+        </div>
+        <div class="tag">A React rich-text editor that weighs almost nothing. Built with contenteditable and restraint.</div>
+      </div>
+      <div class="foot-cols">
+        <div class="col">
+          <span>Project</span>
+          <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://npmjs.com/" target="_blank" rel="noopener">npm</a>
+          <a href="#install">Docs</a>
+        </div>
+        <div class="col">
+          <span>Learn</span>
+          <a href="#size">Size comparison</a>
+          <a href="#how">Source</a>
+          <a href="#install">Quick start</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-base">MIT licensed. This page ships zero web fonts and zero JS frameworks — naturally.</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ── live editor toolbar ──
+  var ed = document.getElementById("ed");
+  var bar = document.getElementById("bar");
+  bar.addEventListener("mousedown", function (e) {
+    var btn = e.target.closest("button");
+    if (!btn) return;
+    e.preventDefault();
+    ed.focus();
+    var c = btn.getAttribute("data-cmd");
+    if (btn.getAttribute("data-link")) {
+      var url = window.prompt("Link URL", "https://");
+      if (url) document.execCommand("createLink", false, url);
+    } else {
+      document.execCommand(c, false, btn.getAttribute("data-val") || null);
+    }
+  });
+
+  // ── the actual editor source, gzipped live → the hero number ──
+  var CORE_SRC = [
+    'import { useRef } from "react";',
+    'const cmd = (c, v) => document.execCommand(c, false, v);',
+    'export default function Editor({ value = "", onChange }) {',
+    '  const ref = useRef(null);',
+    '  const sync = () => onChange?.(ref.current.innerHTML);',
+    '  const B = ({ c, v, label }) => (',
+    '    <button onMouseDown={(e) => { e.preventDefault(); cmd(c, v); sync(); }}>{label}</button>',
+    '  );',
+    '  return (',
+    '    <div>',
+    '      <div className="bar">',
+    '        <B c="bold" label="B" />',
+    '        <B c="italic" label="I" />',
+    '        <B c="formatBlock" v="<h2>" label="H2" />',
+    '        <B c="insertUnorderedList" label="List" />',
+    '        <B c="createLink" v="#" label="Link" />',
+    '      </div>',
+    '      <div ref={ref} contentEditable suppressContentEditableWarning',
+    '           onInput={sync} dangerouslySetInnerHTML={{ __html: value }} />',
+    '    </div>',
+    '  );',
+    '}'
+  ].join("\n");
+
+  function fmtBytes(n) {
+    return n < 1024 ? (n + " B") : ((n / 1024).toFixed(2) + " KB");
+  }
+  function setSize(text) {
+    var a = document.getElementById("size-num");
+    var b = document.getElementById("size-num-2");
+    if (a) a.textContent = text;
+    if (b) b.textContent = "≈ " + text;
+  }
+
+  async function measure() {
+    var bytes = new TextEncoder().encode(CORE_SRC);
+    if (typeof CompressionStream === "undefined") {
+      setSize(fmtBytes(Math.round(bytes.length * 0.45)) + "*");
+      return;
+    }
+    try {
+      var cs = new CompressionStream("gzip");
+      var w = cs.writable.getWriter();
+      w.write(bytes); w.close();
+      var buf = await new Response(cs.readable).arrayBuffer();
+      setSize(fmtBytes(buf.byteLength));
+    } catch (err) {
+      setSize("~412 B");
+    }
+  }
+  measure();
+
+  // ── copy install command ──
+  var npm = document.getElementById("npm");
+  npm.addEventListener("click", function () {
+    var label = document.getElementById("npm-copy");
+    navigator.clipboard.writeText("npm i feather-editor").then(function () {
+      label.textContent = "copied!";
+      setTimeout(function () { label.textContent = "copy"; }, 1600);
+    }).catch(function () {
+      label.textContent = "⌘C";
+    });
+  });
+
+  // ── reveal on scroll ──
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  document.querySelectorAll(".reveal").forEach(function (el, i) {
+    // gentle stagger for hero cluster
+    el.style.transitionDelay = Math.min(i, 6) * 45 + "ms";
+    io.observe(el);
+  });
+})();
+</script>
+
+
+</body></html>

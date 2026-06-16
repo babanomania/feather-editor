@@ -1,0 +1,13 @@
+.feather-theme-nordic.feather-editor,
+.feather-theme-nordic .feather-editor {
+  --fe-bg: #eceff4;
+  --fe-color: #2e3440;
+  --fe-bar-bg: #e0e4ec;
+  --fe-bar-border: #c9d0dd;
+  --fe-btn-color: #2e3440;
+  --fe-btn-hover-bg: #d4dae5;
+  --fe-accent: #5e81ac;
+  --fe-border: #b8c0cf;
+  --fe-heading-color: #2e3440;
+  --fe-selection-bg: rgba(94, 129, 172, 0.22);
+}

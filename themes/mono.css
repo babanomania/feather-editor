@@ -1,0 +1,13 @@
+.feather-theme-mono.feather-editor,
+.feather-theme-mono .feather-editor {
+  --fe-bg: #ffffff;
+  --fe-color: #000000;
+  --fe-bar-bg: #f5f5f5;
+  --fe-bar-border: #000000;
+  --fe-btn-color: #000000;
+  --fe-btn-hover-bg: #e0e0e0;
+  --fe-accent: #000000;
+  --fe-border: #000000;
+  --fe-heading-color: #000000;
+  --fe-selection-bg: rgba(0, 0, 0, 0.18);
+}

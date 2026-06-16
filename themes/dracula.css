@@ -1,0 +1,13 @@
+.feather-theme-dracula.feather-editor,
+.feather-theme-dracula .feather-editor {
+  --fe-bg: #282a36;
+  --fe-color: #f8f8f2;
+  --fe-bar-bg: #313442;
+  --fe-bar-border: #44475a;
+  --fe-btn-color: #f8f8f2;
+  --fe-btn-hover-bg: #44475a;
+  --fe-accent: #bd93f9;
+  --fe-border: #44475a;
+  --fe-heading-color: #ff79c6;
+  --fe-selection-bg: rgba(189, 147, 249, 0.3);
+}

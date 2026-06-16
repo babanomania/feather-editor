@@ -1,0 +1,60 @@
+.feather-editor {
+  --fe-bg: #ffffff;
+  --fe-color: #1a1917;
+  --fe-bar-bg: #fbfaf7;
+  --fe-bar-border: #e7e3da;
+  --fe-btn-color: #1a1917;
+  --fe-btn-hover-bg: #f2f0ea;
+  --fe-accent: #2f5fd0;
+  --fe-border: #d8d3c8;
+  --fe-radius: 12px;
+  --fe-heading-color: #1a1917;
+  --fe-selection-bg: rgba(47, 95, 208, 0.18);
+  --fe-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fe-font-content: Georgia, "Iowan Old Style", "Times New Roman", serif;
+
+  background: var(--fe-bg);
+  color: var(--fe-color);
+  border: 1px solid var(--fe-border);
+  border-radius: var(--fe-radius);
+  font-family: var(--fe-font-sans);
+  overflow: hidden;
+}
+.feather-editor .feather-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--fe-bar-bg);
+  border-bottom: 1px solid var(--fe-bar-border);
+}
+.feather-editor .feather-btn {
+  min-width: 32px;
+  height: 30px;
+  padding: 0 9px;
+  font: 500 13px var(--fe-font-sans);
+  color: var(--fe-btn-color);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.feather-editor .feather-btn:hover {
+  background: var(--fe-btn-hover-bg);
+}
+.feather-editor .feather-content {
+  padding: 18px 22px;
+  min-height: 160px;
+  font: 16px/1.6 var(--fe-font-content);
+  color: var(--fe-color);
+  outline: none;
+}
+.feather-editor .feather-content h2 {
+  font-family: var(--fe-font-sans);
+  color: var(--fe-heading-color);
+  margin: 0 0 10px;
+}
+.feather-editor .feather-content p { margin: 0 0 10px; }
+.feather-editor .feather-content ul { margin: 0 0 10px; padding-left: 22px; }
+.feather-editor .feather-content a { color: var(--fe-accent); }
+.feather-editor .feather-content ::selection { background: var(--fe-selection-bg); }

@@ -1,0 +1,13 @@
+.feather-theme-sage.feather-editor,
+.feather-theme-sage .feather-editor {
+  --fe-bg: #eef3ec;
+  --fe-color: #2f4032;
+  --fe-bar-bg: #dfe7dc;
+  --fe-bar-border: #c2d0bf;
+  --fe-btn-color: #2f4032;
+  --fe-btn-hover-bg: #d2dccd;
+  --fe-accent: #4f7c50;
+  --fe-border: #b3c2af;
+  --fe-heading-color: #1f2f22;
+  --fe-selection-bg: rgba(79, 124, 80, 0.2);
+}

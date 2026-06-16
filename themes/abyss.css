@@ -1,0 +1,13 @@
+.feather-theme-abyss.feather-editor,
+.feather-theme-abyss .feather-editor {
+  --fe-bg: #050507;
+  --fe-color: #b8b6b0;
+  --fe-bar-bg: #0d0d10;
+  --fe-bar-border: #18181c;
+  --fe-btn-color: #b8b6b0;
+  --fe-btn-hover-bg: #18181c;
+  --fe-accent: #5fc3ff;
+  --fe-border: #18181c;
+  --fe-heading-color: #ffffff;
+  --fe-selection-bg: rgba(95, 195, 255, 0.25);
+}

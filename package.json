@@ -1,0 +1,46 @@
+{
+  "name": "feather-editor",
+  "version": "0.1.0",
+  "description": "A React WYSIWYG editor with Markdown round-trip in ~400 bytes. Zero dependencies.",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    },
+    "./core": {
+      "import": "./dist/core.esm.js",
+      "require": "./dist/core.js"
+    },
+    "./themes/*": "./themes/*"
+  },
+  "files": [
+    "dist",
+    "themes",
+    "src"
+  ],
+  "sideEffects": [
+    "themes/*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.0",
+    "react": "^18.0.0"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "node build.js"
+  },
+  "keywords": [
+    "react",
+    "editor",
+    "wysiwyg",
+    "markdown",
+    "contenteditable",
+    "lightweight"
+  ],
+  "license": "MIT"
+}

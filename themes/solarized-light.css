@@ -1,0 +1,13 @@
+.feather-theme-solarized-light.feather-editor,
+.feather-theme-solarized-light .feather-editor {
+  --fe-bg: #fdf6e3;
+  --fe-color: #586e75;
+  --fe-bar-bg: #eee8d5;
+  --fe-bar-border: #d9d2bd;
+  --fe-btn-color: #586e75;
+  --fe-btn-hover-bg: #e3dcc7;
+  --fe-accent: #268bd2;
+  --fe-border: #cbc4ad;
+  --fe-heading-color: #073642;
+  --fe-selection-bg: rgba(38, 139, 210, 0.22);
+}

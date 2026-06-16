@@ -1,0 +1,13 @@
+.feather-theme-sepia.feather-editor,
+.feather-theme-sepia .feather-editor {
+  --fe-bg: #f5ecd9;
+  --fe-color: #5a4a3a;
+  --fe-bar-bg: #efe2c4;
+  --fe-bar-border: #d9c9a7;
+  --fe-btn-color: #5a4a3a;
+  --fe-btn-hover-bg: #e6d6b3;
+  --fe-accent: #8b5a2b;
+  --fe-border: #c9b888;
+  --fe-heading-color: #3d2f1f;
+  --fe-selection-bg: rgba(139, 90, 43, 0.22);
+}
