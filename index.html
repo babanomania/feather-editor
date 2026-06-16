@@ -317,6 +317,92 @@
     * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     .reveal { opacity: 1; transform: none; }
   }
+
+  /* ── mobile polish ── */
+  @media (max-width: 720px) {
+    .wrap { padding: 0 18px; }
+    .nav-in { height: 54px; }
+    .brand { font-size: 14px; }
+    .nav-links { gap: 18px; font-size: 12px; }
+
+    section.band { padding: 60px 0; }
+    .hero { padding: 44px 0 36px; }
+    .feather-bg { width: 240px; height: 240px; top: -20px; right: -50px; opacity: 0.04; }
+    .lede { margin-bottom: 28px; }
+    .cta-row { gap: 10px; margin-bottom: 36px; }
+    .btn { padding: 11px 15px; font-size: 13.5px; }
+    .npm { padding: 10px 12px; font-size: 13px; }
+
+    .ed-bar { padding: 7px 8px; gap: 2px; }
+    .ed-bar button { min-width: 30px; height: 30px; padding: 0 7px; font-size: 12.5px; }
+    .ed-sep { margin: 0 3px; }
+    .ed-area { padding: 18px 18px; font-size: 16px; min-height: 160px; }
+    .ed-foot { padding: 10px 14px; gap: 10px; }
+    .meter { gap: 10px; }
+    .meter .num { font-size: 18px; }
+    .meter .lab { font-size: 12px; }
+
+    h2.sec { font-size: clamp(24px, 6vw, 32px); }
+    .sec-lede { font-size: 16.5px; margin-bottom: 30px; }
+    .kicker { font-size: 11px; }
+
+    .bar-row { grid-template-columns: 82px 1fr; gap: 12px; }
+    .bar-name { font-size: 12.5px; }
+    .bar-fill { height: 18px; }
+    .bar-val { font-size: 11.5px; }
+
+    .cell { padding: 24px 22px; }
+    .cell h3 { font-size: 16px; }
+    .cell p { font-size: 15px; }
+
+    .code { font-size: 12px; padding: 18px 18px; line-height: 1.65; }
+    .source-meta { gap: 18px; }
+    .source-meta div b { font-size: 17px; }
+
+    .ucode { font-size: 12.5px; padding: 18px 18px; }
+
+    .honest { padding: 26px 22px; }
+    .honest p { font-size: 16px; }
+
+    footer { padding: 40px 0 48px; }
+    .foot-in { gap: 24px; }
+    .foot-cols { gap: 36px; width: 100%; }
+    .foot-base { margin-top: 32px; }
+  }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 0 16px; }
+    section.band { padding: 48px 0; }
+    .hero { padding: 36px 0 30px; }
+    .feather-bg { display: none; }
+
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .btn, .npm { justify-content: center; width: 100%; }
+    .npm { padding: 11px 14px; }
+
+    .ed-bar { padding: 6px 6px; }
+    .ed-bar button { min-width: 28px; height: 28px; padding: 0 6px; font-size: 12px; }
+    .ed-area { padding: 16px 16px; font-size: 15.5px; }
+    .ed-foot { flex-direction: column; align-items: flex-start; }
+
+    h1 { font-size: clamp(34px, 9vw, 44px); }
+    h2.sec { font-size: clamp(22px, 6.5vw, 28px); }
+    .sec-lede { font-size: 15.5px; }
+
+    .bar-row { grid-template-columns: 70px 1fr; gap: 10px; }
+    .bar-name { font-size: 12px; }
+    .bar-val { font-size: 11px; }
+
+    .source-meta { gap: 14px; }
+    .source-meta div b { font-size: 16px; }
+    .source-meta div span { font-size: 10px; }
+
+    .mode-h { flex-wrap: wrap; }
+
+    .honest { padding: 22px 18px; }
+
+    .foot-cols { flex-direction: column; gap: 22px; }
+  }
 </style>
 </head>
 <body>
