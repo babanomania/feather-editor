@@ -133,6 +133,14 @@ Measured from the actual `dist/*.esm.js` output. Sizes vary by bundler and tree-
 
 Anything that supports `contentEditable`, the Selection API, and `document.execCommand` — i.e. every browser in active use.
 
+## Development
+
+```bash
+npm install
+npm run build   # builds both bundles, prints gzipped sizes
+npm test        # runs the markdown round-trip + bundle smoke tests
+```
+
 ## License
 
 MIT.
