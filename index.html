@@ -464,7 +464,7 @@
           <button data-cmd="insertUnorderedList" title="List">•&nbsp;List</button>
           <button data-cmd="createLink" data-link="1" title="Link">↗&nbsp;Link</button>
           <span class="ed-sep"></span>
-          <button data-cmd="removeFormat" title="Clear">⌫</button>
+          <button data-cmd="removeFormat" title="Clear formatting">Tx</button>
         </div>
         <div class="ed-area" id="ed" contenteditable="" spellcheck="false">
           <h2>Edit this.</h2>
@@ -911,6 +911,10 @@ npm i feather-editor</pre>
       if (url && !/^(javascript|data|vbscript):/i.test(url.trim())) {
         document.execCommand("createLink", false, url);
       }
+    } else if (c === "removeFormat") {
+      var sel = window.getSelection();
+      if (!sel || sel.isCollapsed) document.execCommand("selectAll");
+      document.execCommand("removeFormat", false, null);
     } else {
       document.execCommand(c, false, btn.getAttribute("data-val") || null);
     }
