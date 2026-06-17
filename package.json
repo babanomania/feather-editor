@@ -37,11 +37,13 @@
   },
   "devDependencies": {
     "esbuild": "^0.21.0",
+    "jsdom": "^25.0.0",
     "react": "^18.0.0"
   },
   "scripts": {
     "build": "node build.js",
-    "prepublishOnly": "node build.js"
+    "prepublishOnly": "node build.js",
+    "test": "node --test tests/*.test.mjs"
   },
   "keywords": [
     "react",

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { toHtml, toMd } from "./markdown.js";
+import { toHtml, toMd, safeUrl } from "./markdown.js";
 
 const cmd = (c, v) => document.execCommand(c, false, v);
 
@@ -14,7 +14,8 @@ export default function Editor({ markdown = "", onChange, theme, className = "",
         e.preventDefault();
         ref.current?.focus();
         if (c === "createLink") {
-          const url = window.prompt("Link URL", "https://");
+          const raw = window.prompt("Link URL", "https://");
+          const url = raw && safeUrl(raw);
           if (url) cmd(c, url);
         } else {
           cmd(c, v);

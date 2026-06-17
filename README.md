@@ -120,6 +120,25 @@ Reach for something heavier if you need any of:
 
 [ProseMirror](https://prosemirror.net), [Tiptap](https://tiptap.dev), and [Lexical](https://lexical.dev) all do those things well, and ship the kilobytes for it. This package is for the common case: a clean, formatted text field that doesn't bloat your bundle.
 
+## Security
+
+`feather-editor` renders the `value` (core mode) or the result of `toHtml(markdown)` (full mode) directly into the editor via `dangerouslySetInnerHTML`. **It is not a sanitizer.** Treat both props as developer-trusted strings — the same trust level you'd apply to a string you're about to inject into the page with `innerHTML`.
+
+If your application stores user-authored content and renders it back through this editor (a notes app, a CMS, a comment system), sanitize on the server before persisting or on the way out before rendering. [DOMPurify](https://github.com/cure53/DOMPurify) is the usual choice for HTML; for Markdown, render with a parser that escapes raw HTML by default (most do).
+
+What we do guarantee:
+
+- The toolbar's *link* button rejects URLs whose scheme is `javascript:`, `data:`, or `vbscript:`. Same for `[text](url)` links in the Markdown input to `toHtml`. A blocked link renders as plain text with no `href`.
+- The library has zero runtime dependencies, so there is no transitive supply-chain surface.
+
+What we do not do:
+
+- Strip `<script>` tags from the HTML you pass in.
+- Strip event-handler attributes (`onerror`, `onclick`, etc.) from elements you pass in.
+- Run any general-purpose sanitization.
+
+If you need any of the above, sanitize before handing the string to the editor.
+
 ## Size
 
 | Build | gzipped |
@@ -132,6 +151,14 @@ Measured from the actual `dist/*.esm.js` output. Sizes vary by bundler and tree-
 ## Browser support
 
 Anything that supports `contentEditable`, the Selection API, and `document.execCommand` — i.e. every browser in active use.
+
+## Development
+
+```bash
+npm install
+npm run build   # builds both bundles, prints gzipped sizes
+npm test        # runs the markdown round-trip + bundle smoke tests
+```
 
 ## License
 

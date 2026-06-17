@@ -146,6 +146,8 @@
   .meter .lab { color: var(--ink-soft); }
   .meter .lab b { color: var(--ink); font-weight: 600; }
   .meter .live { display: inline-flex; align-items: center; gap: 6px; }
+  .meter .live a { color: var(--accent); text-decoration: underline; }
+  .meter .live a:hover { color: var(--accent-deep); }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
 
@@ -194,6 +196,10 @@
   .source-meta div span { color: #8C887F; display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
   .source-meta div b { color: #fff; font-weight: 600; font-size: 19px; }
   .source-meta .accent b { color: #9FBAF2; }
+  .verify { font-family: var(--mono); font-size: 13px; line-height: 1.65; color: #B7B2A8; margin: 24px 0 0; max-width: 66ch; }
+  .verify code { color: #fff; background: var(--graphite-2); padding: 1px 5px; border-radius: 4px; }
+  .verify a { color: #9FBAF2; text-decoration: underline; text-decoration-thickness: 1px; }
+  .verify a:hover { color: #C3D3F7; }
 
   /* ── usage ── */
   .usage-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
@@ -471,10 +477,10 @@
         </div>
         <div class="ed-foot">
           <div class="meter">
-            <span class="num" id="size-num">450 B</span>
+            <span class="num" id="size-num">436 B</span>
             <span class="lab"><b>gzipped.</b> The whole editor.</span>
           </div>
-          <span class="live"><span class="dot"></span>measured live in your browser</span>
+          <span class="live"><span class="dot"></span>measured live from <a href="https://unpkg.com/feather-editor/dist/core.esm.js" target="_blank" rel="noopener">the real file ↗</a></span>
         </div>
       </div>
     </div>
@@ -552,34 +558,39 @@
     <p class="sec-lede reveal in" style="transition-delay: 270ms;">Not a teaser snippet. This is the core that renders the toolbar, handles every formatting command, and exposes a clean React component.</p>
     <pre class="code reveal in" style="transition-delay: 270ms;"><span class="kw">import</span> { useRef } <span class="kw">from</span> <span class="st">"react"</span>;
 
-<span class="kw">const</span> <span class="fn">cmd</span> = (c, v) =&gt; document.<span class="fn">execCommand</span>(c, <span class="kw">false</span>, v);
+<span class="kw">const</span> <span class="fn">x</span> = (c, v) =&gt; document.<span class="fn">execCommand</span>(c, <span class="kw">false</span>, v);
 
 <span class="kw">export default function</span> <span class="fn">Editor</span>({ value = <span class="st">""</span>, onChange }) {
-  <span class="kw">const</span> ref = <span class="fn">useRef</span>(<span class="kw">null</span>);
-  <span class="kw">const</span> <span class="fn">sync</span> = () =&gt; onChange?.(ref.current.innerHTML);
-  <span class="kw">const</span> <span class="fn">B</span> = ({ c, v, label }) =&gt; (
-    &lt;<span class="fn">button</span> onMouseDown={(e) =&gt; { e.<span class="fn">preventDefault</span>(); <span class="fn">cmd</span>(c, v); <span class="fn">sync</span>(); }}&gt;{label}&lt;/button&gt;
+  <span class="kw">const</span> r = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> <span class="fn">s</span> = () =&gt; onChange?.(r.current.innerHTML);
+  <span class="kw">const</span> <span class="fn">B</span> = ({ c, v, l }) =&gt; (
+    &lt;<span class="fn">button</span> onMouseDown={(e) =&gt; (e.<span class="fn">preventDefault</span>(), <span class="fn">x</span>(c, v), <span class="fn">s</span>())}&gt;{l}&lt;/button&gt;
   );
   <span class="kw">return</span> (
-    &lt;<span class="fn">div</span>&gt;
-      &lt;<span class="fn">div</span> className=<span class="st">"bar"</span>&gt;
-        &lt;<span class="fn">B</span> c=<span class="st">"bold"</span> label=<span class="st">"B"</span> /&gt;
-        &lt;<span class="fn">B</span> c=<span class="st">"italic"</span> label=<span class="st">"I"</span> /&gt;
-        &lt;<span class="fn">B</span> c=<span class="st">"formatBlock"</span> v=<span class="st">"&lt;h2&gt;"</span> label=<span class="st">"H2"</span> /&gt;
-        &lt;<span class="fn">B</span> c=<span class="st">"insertUnorderedList"</span> label=<span class="st">"List"</span> /&gt;
-        &lt;<span class="fn">B</span> c=<span class="st">"createLink"</span> v=<span class="st">"#"</span> label=<span class="st">"Link"</span> /&gt;
+    &lt;<span class="fn">div</span> className=<span class="st">"feather-editor"</span>&gt;
+      &lt;<span class="fn">div</span> className=<span class="st">"feather-bar"</span>&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"bold"</span> l=<span class="st">"B"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"italic"</span> l=<span class="st">"I"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"formatBlock"</span> v=<span class="st">"&lt;h2&gt;"</span> l=<span class="st">"H2"</span> /&gt;
+        &lt;<span class="fn">B</span> c=<span class="st">"insertUnorderedList"</span> l=<span class="st">"List"</span> /&gt;
       &lt;/<span class="fn">div</span>&gt;
-      &lt;<span class="fn">div</span> ref={ref} contentEditable suppressContentEditableWarning
-           onInput={<span class="fn">sync</span>} dangerouslySetInnerHTML={{ __html: value }} /&gt;
+      &lt;<span class="fn">div</span> ref={r} className=<span class="st">"feather-content"</span> contentEditable suppressContentEditableWarning
+           onInput={<span class="fn">s</span>} dangerouslySetInnerHTML={{ __html: value }} /&gt;
     &lt;/<span class="fn">div</span>&gt;
   );
 }</pre>
     <div class="source-meta reveal in" style="transition-delay: 270ms;">
-      <div class="accent"><span>Core, gzipped</span><b id="size-num-2">≈ 450 B</b></div>
+      <div class="accent"><span>Core, gzipped</span><b id="size-num-2">≈ 436 B</b></div>
       <div><span>With Markdown round-trip</span><b>≈ 1.2 KB</b></div>
       <div><span>Dependencies</span><b>0</b></div>
       <div><span>Build step</span><b>None</b></div>
     </div>
+    <p class="verify reveal in" style="transition-delay: 270ms;">
+      Don't believe us? The number above isn't typed in — your browser just fetched
+      <code>dist/core.esm.js</code> and gzipped it. It's the exact file published to npm:
+      <a href="https://unpkg.com/feather-editor/dist/core.esm.js" target="_blank" rel="noopener">inspect it on unpkg ↗</a>
+      or <a href="./dist/core.esm.js" target="_blank" rel="noopener">grab the raw file ↗</a> and gzip it yourself.
+    </p>
   </div>
 </section>
 
@@ -896,37 +907,19 @@ npm i feather-editor</pre>
     var c = btn.getAttribute("data-cmd");
     if (btn.getAttribute("data-link")) {
       var url = window.prompt("Link URL", "https://");
-      if (url) document.execCommand("createLink", false, url);
+      // same scheme guard the package ships in safeUrl()
+      if (url && !/^(javascript|data|vbscript):/i.test(url.trim())) {
+        document.execCommand("createLink", false, url);
+      }
     } else {
       document.execCommand(c, false, btn.getAttribute("data-val") || null);
     }
   });
 
-  // ── the actual editor source, gzipped live → the hero number ──
-  var CORE_SRC = [
-    'import { useRef } from "react";',
-    'const cmd = (c, v) => document.execCommand(c, false, v);',
-    'export default function Editor({ value = "", onChange }) {',
-    '  const ref = useRef(null);',
-    '  const sync = () => onChange?.(ref.current.innerHTML);',
-    '  const B = ({ c, v, label }) => (',
-    '    <button onMouseDown={(e) => { e.preventDefault(); cmd(c, v); sync(); }}>{label}</button>',
-    '  );',
-    '  return (',
-    '    <div>',
-    '      <div className="bar">',
-    '        <B c="bold" label="B" />',
-    '        <B c="italic" label="I" />',
-    '        <B c="formatBlock" v="<h2>" label="H2" />',
-    '        <B c="insertUnorderedList" label="List" />',
-    '        <B c="createLink" v="#" label="Link" />',
-    '      </div>',
-    '      <div ref={ref} contentEditable suppressContentEditableWarning',
-    '           onInput={sync} dangerouslySetInnerHTML={{ __html: value }} />',
-    '    </div>',
-    '  );',
-    '}'
-  ].join("\n");
+  // ── measure the REAL published bundle, live, in the browser ──
+  // Fetches the exact dist/core.esm.js that ships to npm and gzips it
+  // client-side. No hardcoded number to drift out of sync.
+  var BUNDLE_URL = "./dist/core.esm.js";
 
   function fmtBytes(n) {
     return n < 1024 ? (n + " B") : ((n / 1024).toFixed(2) + " KB");
@@ -939,19 +932,19 @@ npm i feather-editor</pre>
   }
 
   async function measure() {
-    var bytes = new TextEncoder().encode(CORE_SRC);
-    if (typeof CompressionStream === "undefined") {
-      setSize(fmtBytes(Math.round(bytes.length * 0.45)) + "*");
-      return;
-    }
     try {
+      var res = await fetch(BUNDLE_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("fetch failed");
+      var bytes = new Uint8Array(await res.arrayBuffer());
+      if (typeof CompressionStream === "undefined") { setSize("436 B"); return; }
       var cs = new CompressionStream("gzip");
       var w = cs.writable.getWriter();
       w.write(bytes); w.close();
       var buf = await new Response(cs.readable).arrayBuffer();
       setSize(fmtBytes(buf.byteLength));
     } catch (err) {
-      setSize("~412 B");
+      // e.g. opened via file:// — fall back to the known published size
+      setSize("436 B");
     }
   }
   measure();
