@@ -9,7 +9,7 @@ Execute in the order below unless dependencies say otherwise. Each executor: rea
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
 | 001 | Establish a verification baseline with `node --test` | P1 | M | — | DONE |
-| 002 | Enforce bundle-size budgets in the publish gate | P1 | S | 001 (soft) | TODO |
+| 002 | Enforce bundle-size budgets in the publish gate | P1 | S | 001 (soft) | DONE |
 | 003 | Sanitize URLs in the link toolbar prompt and Markdown link parser | P1 | S | 001 | TODO |
 | 004 | Document the editor's trust boundary in README and CLAUDE.md | P2 | XS | 003 | TODO |
 
