@@ -1,6 +1,6 @@
 {
   "name": "feather-editor",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A React WYSIWYG editor with Markdown round-trip in ~400 bytes. Zero dependencies.",
   "homepage": "https://babanomania.github.io/feather-editor/",
   "repository": {
