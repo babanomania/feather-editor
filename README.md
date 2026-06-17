@@ -1,7 +1,7 @@
 # feather-editor
 
 [![npm version](https://img.shields.io/npm/v/feather-editor)](https://www.npmjs.com/package/feather-editor)
-[![gzip size](https://img.shields.io/bundlephobia/minzip/feather-editor?label=core%20gzip)](https://bundlephobia.com/package/feather-editor)
+[![core gzip](https://img.shields.io/badge/core%20gzip-436%20B-brightgreen)](https://github.com/babanomania/feather-editor/blob/main/dist/core.esm.js)
 [![license](https://img.shields.io/npm/l/feather-editor)](https://github.com/babanomania/feather-editor/blob/main/LICENSE)
 
 A React rich-text editor that weighs almost nothing. The core build is about 440 bytes gzipped. The full build, with Markdown round-trip, is around 1.2 KB.
