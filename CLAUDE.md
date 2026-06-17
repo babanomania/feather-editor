@@ -60,3 +60,4 @@ There are no tests. Verification is: run the build, check the size report, and (
 - Don't ship `landing.html`/`index.html`, `PLAN.md`, `build.js`, or `node_modules/` in the npm tarball. The allowlist in `package.json` already enforces this; don't widen it.
 - Don't add a build step for themes — CSS files ship as-is.
 - Don't add a markdown parser library to `markdown.js`. The whole point is the hand-written round-trip.
+- Don't claim or imply the editor sanitizes input. We deliberately scope URL-scheme blocking (in `safeUrl`) narrowly to the toolbar prompt and Markdown link parser. The HTML `value` prop and the Markdown `markdown` prop pass through unchanged. Any change that adds general-purpose sanitization is a product decision, not a polish change — it adds bytes, runtime cost, and complexity, and it changes the documented contract.
