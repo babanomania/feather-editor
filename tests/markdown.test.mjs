@@ -1,7 +1,7 @@
 import "./_jsdom-setup.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { toHtml, toMd } from "../src/markdown.js";
+import { toHtml, toMd, safeUrl } from "../src/markdown.js";
 
 test("toHtml: heading", () => {
   assert.equal(toHtml("## Hello"), "<h2>Hello</h2>");
@@ -42,4 +42,50 @@ test("toMd: empty input", () => {
 test("round-trip stability: paragraph + bold", () => {
   const md = "Hello **world**";
   assert.equal(toMd(toHtml(md)), md);
+});
+
+test("safeUrl: blocks javascript:", () => {
+  assert.equal(safeUrl("javascript:alert(1)"), "");
+});
+
+test("safeUrl: blocks JavaScript: (case-insensitive)", () => {
+  assert.equal(safeUrl("JaVaScRiPt:alert(1)"), "");
+});
+
+test("safeUrl: blocks data: URLs", () => {
+  assert.equal(safeUrl("data:text/html,<script>alert(1)</script>"), "");
+});
+
+test("safeUrl: blocks vbscript:", () => {
+  assert.equal(safeUrl("vbscript:msgbox()"), "");
+});
+
+test("safeUrl: blocks with leading whitespace", () => {
+  assert.equal(safeUrl("  javascript:alert(1)"), "");
+});
+
+test("safeUrl: allows https", () => {
+  assert.equal(safeUrl("https://example.com"), "https://example.com");
+});
+
+test("safeUrl: allows relative URLs", () => {
+  assert.equal(safeUrl("/path/to/page"), "/path/to/page");
+});
+
+test("safeUrl: allows mailto", () => {
+  assert.equal(safeUrl("mailto:a@b.com"), "mailto:a@b.com");
+});
+
+test("toHtml: strips javascript: link but keeps the text", () => {
+  const out = toHtml("[click me](javascript:xss)");
+  assert.equal(out, "<p>click me</p>");
+  assert.ok(!out.includes("javascript:"), "javascript: leaked through");
+  assert.ok(!out.includes("href"), "href emitted for unsafe URL");
+});
+
+test("toHtml: keeps safe link", () => {
+  assert.equal(
+    toHtml("[click](https://example.com)"),
+    '<p><a href="https://example.com">click</a></p>',
+  );
 });

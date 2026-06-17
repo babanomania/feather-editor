@@ -1,8 +1,18 @@
+// Block URL schemes that execute script when followed.
+// Matches the trimmed input case-insensitively against a fixed list.
+// Anything that isn't dangerous is returned unchanged — relative URLs,
+// fragments, https, mailto, tel all pass through.
+const UNSAFE_SCHEME = /^(javascript|data|vbscript):/i;
+export const safeUrl = (u) => (UNSAFE_SCHEME.test(String(u).trim()) ? "" : u);
+
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 const inline = (s) =>
   esc(s)
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+      const safe = safeUrl(url);
+      return safe ? `<a href="${safe}">${text}</a>` : text;
+    })
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
     .replace(/__([^_]+)__/g, "<u>$1</u>");
